@@ -1,0 +1,6 @@
+{
+  "name": "Msr's Academy",
+  "description": "Msr's Academy & Team - Dr. Babasaheb Ambedkar Library, Tapovan Abhyasika for Girls, Coaching & Competitive Exams, and Mashale's Agricultural Drone Services.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
