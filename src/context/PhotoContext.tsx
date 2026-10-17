@@ -393,28 +393,36 @@ export const PhotoProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [activeSlotForEdit, setActiveSlotForEdit] = useState<PhotoSlot | null>(null);
 
   const getPhotoSrc = (slotId: string, fallbackSlotId?: string): string => {
-    // 1. Direct slotId in photos
-    if (photos[slotId] && photos[slotId].trim() !== '') {
-      return photos[slotId];
+    const rawClean = slotId.replace(/^(home_|core_)/, '');
+    const candidates = [
+      slotId,
+      fallbackSlotId,
+      `home_${rawClean}`,
+      `core_${rawClean}`,
+      rawClean,
+    ].filter(Boolean) as string[];
+
+    // 1. Check user-uploaded photos state
+    for (const key of candidates) {
+      if (photos[key] && photos[key].trim() !== '') return photos[key];
     }
-    // 2. Direct slotId in bundled data
-    if (BUNDLED_UPLOADED_PHOTOS[slotId] && BUNDLED_UPLOADED_PHOTOS[slotId].trim() !== '') {
-      return BUNDLED_UPLOADED_PHOTOS[slotId];
+
+    // 2. Check bundled uploaded photos
+    for (const key of candidates) {
+      if (BUNDLED_UPLOADED_PHOTOS[key] && BUNDLED_UPLOADED_PHOTOS[key].trim() !== '') return BUNDLED_UPLOADED_PHOTOS[key];
     }
-    // 3. Fallback slotId in photos
-    if (fallbackSlotId && photos[fallbackSlotId] && photos[fallbackSlotId].trim() !== '') {
-      return photos[fallbackSlotId];
-    }
-    // 4. Fallback slotId in bundled data
-    if (fallbackSlotId && BUNDLED_UPLOADED_PHOTOS[fallbackSlotId] && BUNDLED_UPLOADED_PHOTOS[fallbackSlotId].trim() !== '') {
-      return BUNDLED_UPLOADED_PHOTOS[fallbackSlotId];
-    }
-    // 5. Default static asset path from PHOTO_SLOTS definition
-    const slotDef = PHOTO_SLOTS.find(s => s.id === slotId) || (fallbackSlotId ? PHOTO_SLOTS.find(s => s.id === fallbackSlotId) : undefined);
+
+    // 3. Find in PHOTO_SLOTS by id or fallbackSlotId
+    const slotDef = PHOTO_SLOTS.find(s => 
+      candidates.includes(s.id) || 
+      (s.fallbackSlotId && candidates.includes(s.fallbackSlotId))
+    );
     if (slotDef && slotDef.defaultSrc) {
       return slotDef.defaultSrc;
     }
-    return '';
+
+    // 4. Default to standard static upload path
+    return `/uploads/${rawClean}.jpg`;
   };
 
   const openPhotoManagerForSlot = (slotId?: string) => {
