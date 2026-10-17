@@ -17,7 +17,7 @@ import { ExamNodeDetailPage } from './ExamNodeDetailPage';
 import { getExamNodeBreadcrumbPath } from '../data/examTreeHierarchy';
 
 interface ExamRoadmapPageProps {
-  examId: 'mpsc' | 'upsc' | 'ssc' | 'rrb';
+  examId: 'mpsc' | 'upsc' | 'ssc' | 'rrb' | 'police';
   onNavigate: (section: NavSection) => void;
   onOpenInquiry: (category: string, subject?: string) => void;
 }

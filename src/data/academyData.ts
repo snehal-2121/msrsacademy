@@ -452,7 +452,7 @@ export const WOMAN_EMPOWERMENT = {
 };
 
 export interface ExamPillarData {
-  id: 'mpsc' | 'upsc' | 'ssc' | 'rrb';
+  id: 'mpsc' | 'upsc' | 'ssc' | 'rrb' | 'police';
   code: string;
   fullName: string;
   marathiFullName: string;
@@ -766,6 +766,81 @@ export const COMPETITIVE_ROADMAP_DATA: ExamPillarData[] = [
       { feature: 'Railway Speed Test Sets & Negative Marking Guidance', marathiFeature: 'नकारात्मक गुणांकन टाळण्यासाठी अचूकतेवर भर' },
       { feature: 'Group Study Rooms with Expert Mentors', marathiFeature: 'ग्रंथालयात एकत्रित गट-अभ्यास व शंका निरसन सुविधा' },
       { feature: 'Free Medical & Vision Criteria Consultation', marathiFeature: 'रेल्वेच्या डोळ्यांच्या व वैद्यकीय निकषांचे विनामूल्य मार्गदर्शन' }
+    ]
+  },
+  {
+    id: 'police',
+    code: 'POLICE BHARTI',
+    fullName: 'Maharashtra Police Bharti Recruitment',
+    marathiFullName: 'महाराष्ट्र पोलीस भरती (गृह विभाग, महाराष्ट्र शासन)',
+    tagline: 'Police Constable, Driver, SRPF & Bandsman Recruitment',
+    marathiTagline: 'पोलीस शिपाई, चालक, SRPF व बँड्समन संपूर्ण भरती प्रक्रिया',
+    badgeColor: 'bg-sky-900 text-white',
+    accentBg: 'from-blue-950/10 via-slate-50 to-sky-50/40',
+    borderColor: 'border-sky-400',
+    popularExams: [
+      {
+        name: 'Police Constable (पोलीस शिपाई)',
+        marathiName: 'पोलीस शिपाई संवर्ग',
+        cadres: 'District Police Force & City Police Commissionerates across Maharashtra'
+      },
+      {
+        name: 'Police Driver (पोलीस शिपाई चालक)',
+        marathiName: 'पोलीस शिपाई चालक संवर्ग',
+        cadres: 'Official Police Patrolling Vehicles, Mobile Van & Emergency Operations'
+      },
+      {
+        name: 'SRPF Armed Constable (सशस्त्र पोलीस शिपाई)',
+        marathiName: 'राज्य राखीव पोलीस बल (SRPF)',
+        cadres: 'State Reserve Police Force Battalions (Gat 1 to 19) specialized security'
+      },
+      {
+        name: 'Police Bandsman & Railway Police (बँड्समन व लोहमार्ग)',
+        marathiName: 'पोलीस बँड्समन व लोहमार्ग पोलीस',
+        cadres: 'Ceremonial Police Brass Band & Maharashtra Railway Police Units'
+      }
+    ],
+    roadmapStages: [
+      {
+        stage: 'पायरी १',
+        title: 'Physical Test / PET (मैदानी चाचणी - ५० गुण)',
+        marathiTitle: 'पहिली पायरी: मैदानी चाचणी (५० गुण)',
+        desc: 'Male: 1600m Running (20M), 100m Running (15M), Shot Put (15M). Female: 800m Running (20M), 100m (15M), Shot Put (15M). Minimum 50% required to qualify for written exam.',
+        marathiDesc: 'पुरुष: १६०० मी धावणे (२० गुण), १०० मी धावणे (१५ गुण), गोळाफेक (१५ गुण). महिला: ८०० मी धावणे (२० गुण), १०० मी धावणे (१५ गुण), गोळाफेक (१५ गुण). किमान ५०% गुण मिळवणे अनिवार्य.'
+      },
+      {
+        stage: 'पायरी २',
+        title: 'Written Examination (लेखी परीक्षा - १०० गुण)',
+        marathiTitle: 'दुसरी पायरी: OMR बहुपर्यायी लेखी परीक्षा (१०० गुण)',
+        desc: '1:10 candidates from physical test called for written test. 100 Questions in 90 Minutes: Marathi Grammar (25), Maths (25), Reasoning (25), GK & Current Affairs (25).',
+        marathiDesc: 'मैदानीत किमान ५०% मिळवणाऱ्यांमधून १:१० प्रमाणात लेखीसाठी पात्र. ९० मिनिटांत १०० प्रश्न: मराठी व्याकरण (२५), अंकगणित (२५), बुद्धिमत्ता चाचणी (२५), सामान्य ज्ञान व चालू घडामोडी (२५).'
+      },
+      {
+        stage: 'पायरी ३',
+        title: 'Driver Skill Test (चालक कौशल्य चाचणी - ५० गुण)',
+        marathiTitle: 'तिसरी पायरी: वाहन चालविणे कौशल्य चाचणी (फक्त चालक पदासाठी)',
+        desc: 'Light Motor Vehicle (LMV) driving (25 marks) + Heavy Vehicle / Jeep driving (25 marks). Qualifying standard is 40% (20 marks).',
+        marathiDesc: 'हलके मोटार वाहन चालवणे (२५ गुण) आणि जीप/अवजड वाहन चालवणे (२५ गुण). उत्तीर्ण होण्यासाठी किमान ४०% गुण आवश्यक.'
+      },
+      {
+        stage: 'पायरी ४',
+        title: 'Document Verification & Medical Fitness',
+        marathiTitle: 'चौथी पायरी: मूळ कागदपत्र पडताळणी व वैद्यकीय तपासणी',
+        desc: 'Final merit list based on aggregate score. Verification of 12th passing, caste, non-creamy layer, domicile & comprehensive medical examination.',
+        marathiDesc: 'अंतिम गुणवत्ता यादी जाहीर झाल्यानंतर मूळ शैक्षणिक व जात प्रमाणपत्र पडताळणी, शारीरिक मोजमाप खात्री आणि शासकीय रुग्णालयात वैद्यकीय तपासणी.'
+      }
+    ],
+    keySubjects: [
+      { subject: 'Marathi Grammar & Vocabulary', marathiSubject: 'मराठी व्याकरण, शब्दसंग्रह व प्रयोग' },
+      { subject: 'Arithmetic & Number Ability', marathiSubject: 'अंकगणित, लसावि-मसावि, शेकडेवारी व सरासरी' },
+      { subject: 'General Intelligence & Reasoning', marathiSubject: 'बुद्धिमत्ता चाचणी, नातेसंबंध व दिशाज्ञान' },
+      { subject: 'General Knowledge & Current Affairs', marathiSubject: 'सामान्य ज्ञान, महाराष्ट्र भूगोल, इतिहास व चालू घडामोडी' }
+    ],
+    academyFeatures: [
+      { feature: 'Ground Training & Running Form Mentorship', marathiFeature: '१६०० मी / ८०० मी धावणे व गोळाफेकीचे विनामूल्य मैदानी मार्गदर्शन' },
+      { feature: '100+ OMR Daily Full-Length Mock Test Batches', marathiFeature: '१०० गुणांच्या OMR शीटवर नियमित लेखी सराव व गुण विश्लेषण' },
+      { feature: 'Grammar & Short Trick Maths Practice Classes', marathiFeature: 'मराठी व्याकरण व अंकगणिताच्या जलद ट्रिक्स' },
+      { feature: 'Dedicated Girls Batch at Taporatna Abhyasika', marathiFeature: 'तपोरत्न अभ्यासिकेत मुलींसाठी विशेष सुरक्षित व अखंड अभ्यासाची सोय' }
     ]
   }
 ];

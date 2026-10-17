@@ -1,153 +1,312 @@
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
-import { savePhotoToStorage, getAllStoredPhotos, clearAllPhotosFromStorage } from '../utils/photoStorage';
+import { savePhotoToStorage, getAllStoredPhotos, clearAllPhotosFromStorage, removePhotoFromStorage } from '../utils/photoStorage';
 import { BUNDLED_UPLOADED_PHOTOS } from '../data/uploadedPhotosData';
+
+export type PhotoScope = 'all' | 'home_circles' | 'home_sections' | 'core_pages' | 'events_gallery';
 
 export interface PhotoSlot {
   id: string;
   marathiTitle: string;
   englishTitle: string;
   category: 'drone' | 'police' | 'abhyasika' | 'library' | 'campus' | 'events' | 'coaching';
+  scope: 'home_circles' | 'home_sections' | 'core_pages' | 'events_gallery';
   destinationDesc: string;
   recommendedWhatsAppFile: string;
   defaultSrc: string;
+  isCircle?: boolean;
+  pagePath?: string;
+  fallbackSlotId?: string;
 }
 
 export const PHOTO_SLOTS: PhotoSlot[] = [
+  // =========================================================================
+  // 1. HOMEPAGE CIRCLE PORTRAITS (होमपेज हेरो वर्तुळाकार प्रेरणा पोर्ट्रेट्स)
+  // =========================================================================
   {
     id: 'dr_ambedkar_hero',
-    marathiTitle: 'भारतरत्न डॉ. बाबासाहेब आंबेडकर (होमपेज मूळ पोर्ट्रेट)',
-    englishTitle: 'Bharat Ratna Dr. B. R. Ambedkar (Homepage Original Portrait)',
+    marathiTitle: 'भारतरत्न डॉ. बाबासाहेब आंबेडकर (होमपेज डावे वर्तुळ)',
+    englishTitle: 'Bharat Ratna Dr. B. R. Ambedkar (Homepage Left Circle Portrait)',
     category: 'library',
-    destinationDesc: 'मुख्य होमपेज हेरो बॅनर - डावीकडील प्रेरणा पोर्ट्रेट (Dr. Ambedkar Library)',
+    scope: 'home_circles',
+    isCircle: true,
+    pagePath: 'मुख्य होमपेज (#/home)',
+    destinationDesc: 'मुख्य होमपेज हेरो बॅनर - डावीकडील वर्तुळाकार प्रेरणा पोर्ट्रेट (Dr. Ambedkar Library)',
     recommendedWhatsAppFile: 'WhatsApp Image 2026-10-16 at 11.14.37 AM (1).jpeg',
     defaultSrc: '/uploads/dr_ambedkar_hero.jpg',
   },
   {
     id: 'taporatna_swamiji_hero',
-    marathiTitle: 'लिंगैक्य श्री. ष. ब्र. तपोरत्नं योगिराजेंद्र शिवाचार्य महास्वामीजी (होमपेज मूळ पोर्ट्रेट)',
-    englishTitle: 'Taporatna Yogirajendra Shivacharya Mahaswamiji (Homepage Original Portrait)',
+    marathiTitle: 'लिंगैक्य श्री. ष. ब्र. तपोरत्नं योगिराजेंद्र शिवाचार्य महास्वामीजी (होमपेज उजवे वर्तुळ)',
+    englishTitle: 'Taporatna Yogirajendra Shivacharya Mahaswamiji (Homepage Right Circle Portrait)',
     category: 'abhyasika',
-    destinationDesc: 'मुख्य होमपेज हेरो बॅनर - उजवीकडील तपोरत्न अभ्यासिका प्रेरणा पोर्ट्रेट',
+    scope: 'home_circles',
+    isCircle: true,
+    pagePath: 'मुख्य होमपेज (#/home)',
+    destinationDesc: 'मुख्य होमपेज हेरो बॅनर - उजवीकडील वर्तुळाकार प्रेरणा पोर्ट्रेट (तपोरत्न अभ्यासिका)',
     recommendedWhatsAppFile: 'WhatsApp Image 2026-10-16 at 11.14.37 AM.jpeg',
     defaultSrc: '/uploads/taporatna_swamiji_hero.jpg',
   },
+
+  // =========================================================================
+  // 2. HOMEPAGE SECTION IMAGES (मुख्य होमपेजवरील विभाग कार्डे)
+  // =========================================================================
   {
-    id: 'drone_puja',
-    marathiTitle: 'कृषी फवारणी ड्रोन लोकार्पण व पूजन',
-    englishTitle: 'Agricultural Drone Launch & Puja Ceremony',
-    category: 'drone',
-    destinationDesc: 'मशाळे ॲग्रिकल्चरल सर्व्हिसेस - ड्रोन मुख्य दृश्य आणि फवारणी माहिती',
-    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.17.03 PM.jpeg',
-    defaultSrc: '',
+    id: 'home_building_exterior',
+    marathiTitle: 'MSR\'s Academy २ मजली मुख्य इमारत व परिसर (होमपेज)',
+    englishTitle: '2-Storey Building Exterior with Balcony & Campus (Homepage)',
+    category: 'campus',
+    scope: 'home_sections',
+    pagePath: 'मुख्य होमपेज (#/home)',
+    destinationDesc: 'मुख्य होमपेज परिचय व हेरो कॅम्पस दृश्य',
+    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.13.31 PM.jpeg',
+    defaultSrc: '/uploads/building_exterior.jpg',
+    fallbackSlotId: 'building_exterior',
   },
   {
-    id: 'police_banner',
-    marathiTitle: 'मुंबई शहर पोलीस दल निवड - कु. लक्ष्मी सोनकडे',
+    id: 'home_tapovan_cubicles',
+    marathiTitle: 'तपोरत्न अभ्यासिका - मुलींचे स्वतंत्र क्युबिकल्स (होमपेज विभाग)',
+    englishTitle: 'Taporatna Girls Study Hall Cubicles (Homepage Section)',
+    category: 'abhyasika',
+    scope: 'home_sections',
+    pagePath: 'मुख्य होमपेज (#/home)',
+    destinationDesc: 'मुख्य होमपेज "तपोरत्न अभ्यासिका" कार्ड',
+    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.13.32 PM.jpeg',
+    defaultSrc: '/uploads/tapovan_cubicles.jpg',
+    fallbackSlotId: 'tapovan_cubicles',
+  },
+  {
+    id: 'home_library_welcome',
+    marathiTitle: 'डॉ. बाबासाहेब आंबेडकर ग्रंथालय स्वागत दालन (होमपेज विभाग)',
+    englishTitle: 'Library Welcome Hall & Display (Homepage Section)',
+    category: 'library',
+    scope: 'home_sections',
+    pagePath: 'मुख्य होमपेज (#/home)',
+    destinationDesc: 'मुख्य होमपेज "डॉ. आंबेडकर ग्रंथालय" मुख्य कार्ड',
+    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.09.11 PM (1).jpeg',
+    defaultSrc: '/uploads/library_welcome.jpg',
+    fallbackSlotId: 'library_welcome',
+  },
+  {
+    id: 'home_library_books',
+    marathiTitle: 'ग्रंथालय संदर्भ कपाट व ग्रंथ संग्रह (होमपेज विभाग)',
+    englishTitle: 'Library Reference Bookshelf (Homepage Section)',
+    category: 'library',
+    scope: 'home_sections',
+    pagePath: 'मुख्य होमपेज (#/home)',
+    destinationDesc: 'मुख्य होमपेज ग्रंथालय विभाग - संदर्भ ग्रंथ कपाट',
+    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.09.11 PM.jpeg',
+    defaultSrc: '/uploads/library_books_closeup.jpg',
+    fallbackSlotId: 'library_books_closeup',
+  },
+  {
+    id: 'home_drone_puja',
+    marathiTitle: 'कृषी फवारणी ड्रोन लोकार्पण व पूजन (होमपेज विभाग)',
+    englishTitle: 'Agricultural Drone Launch Ceremony (Homepage Section)',
+    category: 'drone',
+    scope: 'home_sections',
+    pagePath: 'मुख्य होमपेज (#/home)',
+    destinationDesc: 'मुख्य होमपेज "मशाळे ॲग्रिकल्चरल सर्व्हिसेस" मुख्य कार्ड',
+    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.17.03 PM.jpeg',
+    defaultSrc: '/uploads/drone_puja.jpg',
+    fallbackSlotId: 'drone_puja',
+  },
+  {
+    id: 'home_drone_students',
+    marathiTitle: 'ड्रोन, संचालक व विद्यार्थी गट (होमपेज विभाग)',
+    englishTitle: 'Director & Students with Drone (Homepage Section)',
+    category: 'drone',
+    scope: 'home_sections',
+    pagePath: 'मुख्य होमपेज (#/home)',
+    destinationDesc: 'मुख्य होमपेज कृषी ड्रोन विभाग - टीम छायाचित्र',
+    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.17.01 PM.jpeg',
+    defaultSrc: '/uploads/drone_students_group.jpg',
+    fallbackSlotId: 'drone_students_group',
+  },
+  {
+    id: 'home_drone_family',
+    marathiTitle: 'ड्रोन लोकार्पण - शेतकरी, कुटुंब व संचालक (होमपेज विभाग)',
+    englishTitle: 'Family & Farmers at Drone Launch (Homepage Section)',
+    category: 'drone',
+    scope: 'home_sections',
+    pagePath: 'मुख्य होमपेज (#/home)',
+    destinationDesc: 'मुख्य होमपेज कृषी विभाग - शेतकरी सोहळा',
+    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.17.00 PM.jpeg',
+    defaultSrc: '/uploads/drone_family.jpg',
+    fallbackSlotId: 'drone_family',
+  },
+  {
+    id: 'home_coaching_students',
+    marathiTitle: 'शालेय कोचिंग क्लासेस विद्यार्थी गट (होमपेज विभाग)',
+    englishTitle: 'School Coaching Students Batch (Homepage Section)',
+    category: 'coaching',
+    scope: 'home_sections',
+    pagePath: 'मुख्य होमपेज (#/home)',
+    destinationDesc: 'मुख्य होमपेजवरील "१ ली ते १० वी कोचिंग" मुख्य कार्ड',
+    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.09.12 PM (1).jpeg',
+    defaultSrc: '/uploads/coaching_students.jpg',
+    fallbackSlotId: 'coaching_students',
+  },
+  {
+    id: 'home_police_banner',
+    marathiTitle: 'मुंबई पोलीस दल निवड - कु. लक्ष्मी सोनकडे (यशोगाथा)',
     englishTitle: 'Mumbai Police Selection Felicitation Banner',
     category: 'police',
-    destinationDesc: 'स्पर्धा परीक्षा यशोगाथा दालन (Success Story Banner)',
+    scope: 'home_sections',
+    pagePath: 'मुख्य होमपेज (#/home)',
+    destinationDesc: 'मुख्य होमपेज स्पर्धा परीक्षा यशोगाथा दालन',
     recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.17.02 PM.jpeg',
-    defaultSrc: '',
+    defaultSrc: '/uploads/police_banner.jpg',
+    fallbackSlotId: 'police_banner',
   },
   {
-    id: 'drone_students_group',
-    marathiTitle: 'संचालक, विद्यार्थी व कृषी ड्रोन गट छायाचित्र',
-    englishTitle: 'Director, Students & Family with Drone',
-    category: 'drone',
-    destinationDesc: 'कृषी ड्रोन विभाग आणि गॅलरी',
-    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.17.01 PM.jpeg',
-    defaultSrc: '',
-  },
-  {
-    id: 'drone_family',
-    marathiTitle: 'ड्रोन लोकार्पण - कुटुंबिय, संचालक व शेतकरी',
-    englishTitle: 'Family & Farmers at Drone Inauguration',
-    category: 'drone',
-    destinationDesc: 'कृषी फवारणी विभाग (टीम व संचालक सोहळा)',
-    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.17.00 PM.jpeg',
-    defaultSrc: '',
-  },
-  {
-    id: 'students_celebration',
+    id: 'home_students_celebration',
     marathiTitle: 'ग्रंथालय स्नेहसंमेलन व सत्कार सोहळा',
-    englishTitle: 'Director in Navy Suit & Students with Tricolor Rosettes',
+    englishTitle: 'Director in Navy Suit & Students Celebration',
     category: 'events',
+    scope: 'home_sections',
+    pagePath: 'मुख्य होमपेज (#/home)',
     destinationDesc: 'अकॅडमी उपक्रम, स्नेहसंमेलन व गॅलरी',
     recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.09.12 PM (1).jpeg',
-    defaultSrc: '',
+    defaultSrc: '/uploads/students_celebration.jpg',
+    fallbackSlotId: 'students_celebration',
   },
   {
-    id: 'ambedkar_shivaji_puja',
+    id: 'home_ambedkar_shivaji_puja',
     marathiTitle: 'महामानव डॉ. आंबेडकर व छत्रपती शिवराय वंदना',
     englishTitle: 'Tribute to Dr. Ambedkar & Chhatrapati Shivaji Maharaj',
     category: 'events',
+    scope: 'home_sections',
+    pagePath: 'मुख्य होमपेज (#/home)',
     destinationDesc: 'अकॅडमी प्रेरणास्थान, ग्रंथालय वंदना व गॅलरी',
     recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.09.12 PM.jpeg',
-    defaultSrc: '',
+    defaultSrc: '/uploads/ambedkar_shivaji_puja.jpg',
+    fallbackSlotId: 'ambedkar_shivaji_puja',
   },
+
+  // =========================================================================
+  // 3. CORE SECTION DEDICATED PAGES (स्वतंत्र मुख्य विभाग पाने - होमपेजपेक्षा वेगळे)
+  // =========================================================================
   {
-    id: 'library_welcome',
-    marathiTitle: 'ग्रंथालय स्वागत दालन व WEL-COME सजावट',
-    englishTitle: 'Library Welcome Hall & Golden Balloons Display',
+    id: 'core_library_welcome',
+    marathiTitle: 'ग्रंथालय स्वागत दालन व मांडणी (लायब्ररी स्वतंत्र पान)',
+    englishTitle: 'Library Welcome Hall & Displays (Library Dedicated Page)',
     category: 'library',
-    destinationDesc: 'डॉ. बाबासाहेब आंबेडकर ग्रंथालय मुख्य बॅनर',
+    scope: 'core_pages',
+    pagePath: 'ग्रंथालय स्वतंत्र पान (#/library)',
+    destinationDesc: 'ग्रंथालय स्वतंत्र पान - स्वागत दालन व वाचन परिसर कार्ड',
     recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.09.11 PM (1).jpeg',
-    defaultSrc: '',
+    defaultSrc: '/uploads/library_welcome.jpg',
+    fallbackSlotId: 'home_library_welcome',
   },
   {
-    id: 'library_books_closeup',
-    marathiTitle: 'ग्रंथालय स्पर्धा परीक्षा व संदर्भ ग्रंथ कपाट',
-    englishTitle: 'Library Competitive Exam Book Collections',
-    category: 'library',
-    destinationDesc: 'डॉ. बाबासाहेब आंबेडकर ग्रंथालय - संदर्भ ग्रंथ विभाग',
-    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.09.11 PM.jpeg',
-    defaultSrc: '',
-  },
-  {
-    id: 'tapovan_cubicles',
-    marathiTitle: 'तपोरत्न अभ्यासिका - मुलींसाठी स्वतंत्र क्युबिकल्स',
-    englishTitle: 'Taporatna Girls Study Hall with Cubicles',
+    id: 'core_tapovan_cubicles',
+    marathiTitle: 'तपोरत्न अभ्यासिका - मुलींचे क्युबिकल्स (लायब्ररी व अभ्यासिका पान)',
+    englishTitle: 'Taporatna Girls Study Cubicles (Library & Abhyasika Page)',
     category: 'abhyasika',
-    destinationDesc: 'तपोरत्न अभ्यासिका मुख्य विभाग व सुविधा सूची',
+    scope: 'core_pages',
+    pagePath: 'ग्रंथालय स्वतंत्र पान (#/library)',
+    destinationDesc: 'ग्रंथालय व अभ्यासिका स्वतंत्र पान - विद्यार्थिनी क्युबिकल्स कार्ड',
     recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.13.32 PM.jpeg',
-    defaultSrc: '',
+    defaultSrc: '/uploads/tapovan_cubicles.jpg',
+    fallbackSlotId: 'home_tapovan_cubicles',
   },
   {
-    id: 'building_exterior',
-    marathiTitle: 'MSR\'s Academy २ मजली मुख्य इमारत व परिसर',
-    englishTitle: '2-Storey Building Exterior with Balcony & Buntings',
-    category: 'campus',
-    destinationDesc: 'मुख्य कॅम्पस परिचय, हेरो बॅनर व गॅलरी',
-    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.13.31 PM.jpeg',
-    defaultSrc: '',
-  },
-  {
-    id: 'library_showcase',
-    marathiTitle: 'ग्रंथालय पुरस्कार, स्मृतिचिन्हे व बुद्ध मूर्ती दालन',
-    englishTitle: 'Double White Bookshelves, Awards & Buddha Showcase',
+    id: 'core_library_books',
+    marathiTitle: 'स्पर्धा परीक्षा संदर्भ ग्रंथ कपाट (लायब्ररी स्वतंत्र पान)',
+    englishTitle: 'Competitive Exam Bookshelves (Library Dedicated Page)',
     category: 'library',
-    destinationDesc: 'ग्रंथालय दालन आणि अकॅडमी उपलब्धी',
-    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.12.28 PM.jpeg',
-    defaultSrc: '',
+    scope: 'core_pages',
+    pagePath: 'ग्रंथालय स्वतंत्र पान (#/library)',
+    destinationDesc: 'ग्रंथालय स्वतंत्र पान - संदर्भ ग्रंथ कपाट कार्ड',
+    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.09.11 PM.jpeg',
+    defaultSrc: '/uploads/library_books_closeup.jpg',
+    fallbackSlotId: 'home_library_books',
   },
   {
-    id: 'coaching_students',
-    marathiTitle: 'शालेय कोचिंग व अकॅडमी विद्यार्थी गट',
-    englishTitle: 'School Coaching & Academy Students Batch',
+    id: 'core_library_showcase',
+    marathiTitle: 'ग्रंथालय पुरस्कार, स्मृतिचिन्हे व बुद्ध मूर्ती दालन (लायब्ररी स्वतंत्र पान)',
+    englishTitle: 'Awards, Buddha Statue & Showcase (Library Dedicated Page)',
+    category: 'library',
+    scope: 'core_pages',
+    pagePath: 'ग्रंथालय स्वतंत्र पान (#/library)',
+    destinationDesc: 'ग्रंथालय स्वतंत्र पान - उपलब्धी व स्मृतिचिन्हे दालन',
+    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.12.28 PM.jpeg',
+    defaultSrc: '/uploads/library_showcase.jpg',
+    fallbackSlotId: 'library_showcase',
+  },
+  {
+    id: 'core_agriculture_drone_puja',
+    marathiTitle: 'कृषी फवारणी ड्रोन लोकार्पण सोहळा (कृषी स्वतंत्र पान)',
+    englishTitle: 'Agricultural Drone Puja & Inauguration (Agriculture Page)',
+    category: 'drone',
+    scope: 'core_pages',
+    pagePath: 'कृषी ड्रोन स्वतंत्र पान (#/agriculture)',
+    destinationDesc: 'कृषी ड्रोन स्वतंत्र पान - मुख्य लोकार्पण व फवारणी कार्ड',
+    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.17.03 PM.jpeg',
+    defaultSrc: '/uploads/drone_puja.jpg',
+    fallbackSlotId: 'home_drone_puja',
+  },
+  {
+    id: 'core_agriculture_drone_team',
+    marathiTitle: 'ड्रोन तंत्रज्ञान, संचालक व विद्यार्थी संघ (कृषी स्वतंत्र पान)',
+    englishTitle: 'Director & Students Drone Team (Agriculture Page)',
+    category: 'drone',
+    scope: 'core_pages',
+    pagePath: 'कृषी ड्रोन स्वतंत्र पान (#/agriculture)',
+    destinationDesc: 'कृषी ड्रोन स्वतंत्र पान - तंत्रज्ञान संघ कार्ड',
+    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.17.01 PM.jpeg',
+    defaultSrc: '/uploads/drone_students_group.jpg',
+    fallbackSlotId: 'home_drone_students',
+  },
+  {
+    id: 'core_agriculture_drone_farmers',
+    marathiTitle: 'शेतकरी कुटुंब व ड्रोन लोकार्पण सोहळा (कृषी स्वतंत्र पान)',
+    englishTitle: 'Family & Farmers at Launch (Agriculture Page)',
+    category: 'drone',
+    scope: 'core_pages',
+    pagePath: 'कृषी ड्रोन स्वतंत्र पान (#/agriculture)',
+    destinationDesc: 'कृषी ड्रोन स्वतंत्र पान - शेतकरी सहभाग कार्ड',
+    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.17.00 PM.jpeg',
+    defaultSrc: '/uploads/drone_family.jpg',
+    fallbackSlotId: 'home_drone_family',
+  },
+  {
+    id: 'core_coaching_batch',
+    marathiTitle: '१ ली ते १० वी शालेय कोचिंग बॅच (कोचिंग स्वतंत्र पान)',
+    englishTitle: 'School Coaching Classroom Batch (Coaching Page)',
     category: 'coaching',
-    destinationDesc: '१ ली ते १० वी कोचिंग क्लासेस (Coaching Section)',
+    scope: 'core_pages',
+    pagePath: 'शालेय कोचिंग स्वतंत्र पान (#/coaching)',
+    destinationDesc: 'शालेय कोचिंग स्वतंत्र पान - मुख्य वर्गखोली व विद्यार्थी फोटो',
     recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.09.12 PM (1).jpeg',
-    defaultSrc: '',
+    defaultSrc: '/uploads/coaching_students.jpg',
+    fallbackSlotId: 'home_coaching_students',
+  },
+  {
+    id: 'core_about_campus',
+    marathiTitle: 'MSR\'s Academy २-मजली मुख्य इमारत व परिसर (आमच्याबद्दल पान)',
+    englishTitle: 'Academy 2-Storey Campus Architecture (About Us Page)',
+    category: 'campus',
+    scope: 'core_pages',
+    pagePath: 'आमच्याबद्दल स्वतंत्र पान (#/about-page)',
+    destinationDesc: 'आमच्याबद्दल स्वतंत्र पान - अकॅडमी कॅम्पस परिचय',
+    recommendedWhatsAppFile: 'WhatsApp Image 2026-09-24 at 3.13.31 PM.jpeg',
+    defaultSrc: '/uploads/building_exterior.jpg',
+    fallbackSlotId: 'home_building_exterior',
   },
 ];
 
 interface PhotoContextType {
   photos: Record<string, string>;
-  getPhotoSrc: (slotId: string) => string;
+  getPhotoSrc: (slotId: string, fallbackSlotId?: string) => string;
   updatePhoto: (slotId: string, dataUrl: string, originalFilename?: string) => Promise<void>;
+  resetPhoto: (slotId: string) => Promise<void>;
   bulkImportFiles: (files: FileList | File[]) => Promise<{ matched: number; total: number }>;
   isModalOpen: boolean;
   setIsModalOpen: (open: boolean) => void;
+  activeSlotForEdit: PhotoSlot | null;
+  setActiveSlotForEdit: (slot: PhotoSlot | null) => void;
+  openPhotoManagerForSlot: (slotId?: string) => void;
   resetAllPhotos: () => Promise<void>;
 }
 
@@ -231,14 +390,52 @@ export const PhotoProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     load();
   }, []);
 
-  const getPhotoSrc = (slotId: string): string => {
-    if (photos[slotId] && photos[slotId].startsWith('data:image')) {
+  const [activeSlotForEdit, setActiveSlotForEdit] = useState<PhotoSlot | null>(null);
+
+  const getPhotoSrc = (slotId: string, fallbackSlotId?: string): string => {
+    // 1. Direct slotId in photos
+    if (photos[slotId] && photos[slotId].trim() !== '') {
       return photos[slotId];
     }
-    if (BUNDLED_UPLOADED_PHOTOS[slotId] && BUNDLED_UPLOADED_PHOTOS[slotId].startsWith('data:image')) {
+    // 2. Direct slotId in bundled data
+    if (BUNDLED_UPLOADED_PHOTOS[slotId] && BUNDLED_UPLOADED_PHOTOS[slotId].trim() !== '') {
       return BUNDLED_UPLOADED_PHOTOS[slotId];
     }
+    // 3. Fallback slotId in photos
+    if (fallbackSlotId && photos[fallbackSlotId] && photos[fallbackSlotId].trim() !== '') {
+      return photos[fallbackSlotId];
+    }
+    // 4. Fallback slotId in bundled data
+    if (fallbackSlotId && BUNDLED_UPLOADED_PHOTOS[fallbackSlotId] && BUNDLED_UPLOADED_PHOTOS[fallbackSlotId].trim() !== '') {
+      return BUNDLED_UPLOADED_PHOTOS[fallbackSlotId];
+    }
+    // 5. Default static asset path from PHOTO_SLOTS definition
+    const slotDef = PHOTO_SLOTS.find(s => s.id === slotId) || (fallbackSlotId ? PHOTO_SLOTS.find(s => s.id === fallbackSlotId) : undefined);
+    if (slotDef && slotDef.defaultSrc) {
+      return slotDef.defaultSrc;
+    }
     return '';
+  };
+
+  const openPhotoManagerForSlot = (slotId?: string) => {
+    if (slotId) {
+      const found = PHOTO_SLOTS.find(s => s.id === slotId);
+      if (found) {
+        setActiveSlotForEdit(found);
+      }
+    } else {
+      setActiveSlotForEdit(null);
+    }
+    setIsModalOpen(true);
+  };
+
+  const resetPhoto = async (slotId: string) => {
+    await removePhotoFromStorage(slotId);
+    setPhotos(prev => {
+      const copy = { ...prev };
+      delete copy[slotId];
+      return copy;
+    });
   };
 
   const updatePhoto = async (slotId: string, rawDataUrl: string, originalFilename?: string) => {
@@ -364,11 +561,15 @@ export const PhotoProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     photos,
     getPhotoSrc,
     updatePhoto,
+    resetPhoto,
     bulkImportFiles,
     isModalOpen,
     setIsModalOpen,
+    activeSlotForEdit,
+    setActiveSlotForEdit,
+    openPhotoManagerForSlot,
     resetAllPhotos,
-  }), [photos, isModalOpen]);
+  }), [photos, isModalOpen, activeSlotForEdit]);
 
   return (
     <PhotoContext.Provider value={value}>

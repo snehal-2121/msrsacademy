@@ -4,6 +4,7 @@ import { DRONE_AGRICULTURE_INFO, ACADEMY_INFO } from '../data/academyData';
 import { usePhotos } from '../context/PhotoContext';
 import { useLanguage } from '../context/LanguageContext';
 import { NavSection } from '../types';
+import { EditableImage } from '../components/EditableImage';
 
 interface AgriculturePageProps {
   onNavigate: (section: NavSection) => void;
@@ -176,10 +177,12 @@ export const AgriculturePage: React.FC<AgriculturePageProps> = ({ onNavigate, on
               {dronePujaImg && (
                 <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-xs group">
                   <div className="h-60 overflow-hidden">
-                    <img
-                      src={dronePujaImg}
+                    <EditableImage
+                      slotId="core_agriculture_drone_puja"
+                      fallbackSlotId="drone_puja"
                       alt="Agricultural Drone Launch & Puja Ceremony"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full"
+                      imgClassName="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                   <div className="p-4 bg-slate-50">
@@ -192,10 +195,12 @@ export const AgriculturePage: React.FC<AgriculturePageProps> = ({ onNavigate, on
               {droneFamilyImg && (
                 <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-xs group">
                   <div className="h-60 overflow-hidden">
-                    <img
-                      src={droneFamilyImg}
+                    <EditableImage
+                      slotId="core_agriculture_drone_farmers"
+                      fallbackSlotId="drone_family"
                       alt="Drone Inauguration with Family and Farmers"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full"
+                      imgClassName="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                   <div className="p-4 bg-slate-50">
@@ -208,10 +213,12 @@ export const AgriculturePage: React.FC<AgriculturePageProps> = ({ onNavigate, on
               {droneStudentsImg && (
                 <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-xs group">
                   <div className="h-60 overflow-hidden">
-                    <img
-                      src={droneStudentsImg}
+                    <EditableImage
+                      slotId="core_agriculture_drone_team"
+                      fallbackSlotId="drone_students_group"
                       alt="Students and Team with Agricultural Drone"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full"
+                      imgClassName="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                   <div className="p-4 bg-slate-50">

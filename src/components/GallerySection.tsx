@@ -141,11 +141,30 @@ export const GallerySection: React.FC = () => {
   ];
 
   // Include any additional custom uploaded photos beyond the standard slots
-  const knownSlotIds = new Set(PHOTO_SLOTS.map(s => s.id));
+  const knownSlotIds = new Set<string>([
+    ...PHOTO_SLOTS.map(s => s.id),
+    ...PHOTO_SLOTS.filter(s => s.fallbackSlotId).map(s => s.fallbackSlotId as string),
+    ...slotGalleryItems.map(s => s.id),
+    'ambedkar_shivaji_puja',
+    'building_exterior',
+    'drone_family',
+    'drone_puja',
+    'drone_students_group',
+    'library_showcase',
+    'police_banner',
+    'students_celebration',
+    'tapovan_cubicles',
+    'library_welcome',
+    'library_books_closeup',
+    'coaching_students',
+    'dr_ambedkar_hero',
+    'taporatna_swamiji_hero',
+  ]);
+
   const extraUploadedItems = Object.entries(photos)
     .filter(([key, val]) => !knownSlotIds.has(key) && typeof val === 'string' && val.startsWith('data:image'))
     .map(([key, val], idx) => ({
-      id: key,
+      id: `custom_photo_${key}_${idx}`,
       src: val,
       title: `MSR's Academy प्रत्यक्ष छायाचित्र #${idx + 1}`,
       tag: 'प्रत्यक्ष फोटो (Real Photo)',
@@ -154,11 +173,17 @@ export const GallerySection: React.FC = () => {
       fileName: undefined as string | undefined,
     }));
 
-  // ONLY include real-time uploaded images (never AI-generated images)
-  const galleryItems = [
+  // ONLY include real-time uploaded images (never AI-generated images) & ensure unique IDs
+  const rawItems = [
     ...slotGalleryItems.filter(item => Boolean(item.src)),
     ...extraUploadedItems,
   ];
+  const seenGalleryIds = new Set<string>();
+  const galleryItems = rawItems.filter(item => {
+    if (seenGalleryIds.has(item.id)) return false;
+    seenGalleryIds.add(item.id);
+    return true;
+  });
 
   const categories = [
     { id: 'all', label: t('सर्व फोटो (All)', 'All Photos') },
@@ -356,7 +381,7 @@ export const GallerySection: React.FC = () => {
                 >
                   {filteredItems.map((item, index) => (
                     <div
-                      key={item.id || index}
+                      key={`gallery-slide-${item.id}-${index}`}
                       className="w-full shrink-0 flex flex-col"
                     >
                       {/* Slide Image Viewport */}
@@ -436,7 +461,7 @@ export const GallerySection: React.FC = () => {
                   const isActive = idx === safeIndex;
                   return (
                     <button
-                      key={item.id || idx}
+                      key={`gallery-thumb-${item.id}-${idx}`}
                       onClick={() => setCurrentIndex(idx)}
                       className={`relative shrink-0 w-20 h-14 sm:w-24 sm:h-16 rounded-xl overflow-hidden border-2 transition-all ${
                         isActive

@@ -23,7 +23,7 @@ export const CompetitivePlatformRoadmap: React.FC<CompetitivePlatformRoadmapProp
 }) => {
   const { language, t } = useLanguage();
 
-  const handlePillarClick = (examId: 'mpsc' | 'upsc' | 'ssc' | 'rrb') => {
+  const handlePillarClick = (examId: 'mpsc' | 'upsc' | 'ssc' | 'rrb' | 'police') => {
     if (onNavigate) {
       const targetSection = `exam-${examId}` as NavSection;
       onNavigate(targetSection);
@@ -46,10 +46,10 @@ export const CompetitivePlatformRoadmap: React.FC<CompetitivePlatformRoadmapProp
         <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-serif tracking-tight">
           {t('स्पर्धा परीक्षा रोडमॅप व रचना (Exam Roadmap)', 'Competitive Exam Roadmap & Platform')}
         </h3>
-        <p className="text-xs sm:text-sm text-slate-600 mt-2 max-w-xl mx-auto leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-600 mt-2 max-w-2xl mx-auto leading-relaxed">
           {t(
-            'MPSC, UPSC, SSC आणि RRB या चार प्रमुख परीक्षांची रचना. खालील स्तंभावर क्लिक करून सविस्तर स्टडी मॅप आणि परीक्षा आराखडा पहा.',
-            'Structured 4-pillar preparation platform. Click any exam pillar to explore its complete visual Study Map and preparation roadmap.'
+            'MPSC, UPSC, SSC, RRB आणि पोलीस भरती या पाच प्रमुख परीक्षांची रचना. खालील स्तंभावर क्लिक करून सविस्तर स्टडी मॅप आणि परीक्षा आराखडा पहा.',
+            'Structured 5-pillar preparation platform: MPSC, UPSC, SSC, RRB & Police Bharti. Click any exam pillar to explore its complete visual Study Map and preparation roadmap.'
           )}
         </p>
       </div>
@@ -57,7 +57,7 @@ export const CompetitivePlatformRoadmap: React.FC<CompetitivePlatformRoadmapProp
       {/* ========================================================================= */}
       {/* EXACT HANDWRITTEN TREE ROADMAP DIAGRAM (From user uploaded sketch) */}
       {/* ========================================================================= */}
-      <div className="max-w-4xl mx-auto relative z-10 bg-slate-50/90 rounded-2xl p-5 sm:p-8 border border-slate-200 shadow-xs">
+      <div className="max-w-6xl mx-auto relative z-10 bg-slate-50/90 rounded-2xl p-4 sm:p-7 border border-slate-200 shadow-xs">
         <div className="text-center mb-4">
           <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest block mb-1">
             {t('मार्गदर्शक रचना रेखाचित्र · Architectural Diagram', 'Handwritten Roadmap Architecture')}
@@ -81,25 +81,25 @@ export const CompetitivePlatformRoadmap: React.FC<CompetitivePlatformRoadmapProp
 
         {/* Tree Branching Bar */}
         <div className="relative mt-0">
-          {/* Horizontal line spanning across all 4 columns */}
-          <div className="hidden md:block absolute top-0 left-[12%] right-[12%] h-[3.5px] bg-slate-900 rounded-full shadow-2xs" />
+          {/* Horizontal line spanning across all 5 columns */}
+          <div className="hidden lg:block absolute top-0 left-[8%] right-[8%] h-[3.5px] bg-slate-900 rounded-full shadow-2xs" />
 
-          {/* 4 Pillars matching the drawing: MPSC, UPSC, SSC, RRB */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 relative pt-0 md:pt-4">
+          {/* 5 Pillars matching the platform: MPSC, UPSC, SSC, RRB, POLICE BHARTI */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-3.5 relative pt-0 lg:pt-4">
             {COMPETITIVE_ROADMAP_DATA.map((exam) => {
               return (
                 <div key={exam.id} className="flex flex-col items-center">
                   {/* Vertical stem drop on desktop */}
-                  <div className="hidden md:block w-[3.5px] h-5 bg-slate-900 -mt-4 mb-1 rounded-full shadow-2xs" />
-                  <div className="hidden md:block w-2.5 h-2.5 border-b-[2.5px] border-r-[2.5px] border-slate-900 rotate-45 -mt-2.5 mb-1.5" />
+                  <div className="hidden lg:block w-[3.5px] h-5 bg-slate-900 -mt-4 mb-1 rounded-full shadow-2xs" />
+                  <div className="hidden lg:block w-2.5 h-2.5 border-b-[2.5px] border-r-[2.5px] border-slate-900 rotate-45 -mt-2.5 mb-1.5" />
 
                   {/* Card Button Navigating to Dedicated Exam Roadmap Page */}
                   <button
                     onClick={() => handlePillarClick(exam.id)}
-                    className="w-full p-4 sm:p-5 rounded-2xl text-center transition-all duration-300 border flex flex-col items-center justify-between gap-2.5 group bg-white text-slate-800 border-slate-200 hover:border-blue-700 hover:shadow-xl hover:scale-103 cursor-pointer shadow-xs min-h-[170px]"
+                    className="w-full p-4 rounded-2xl text-center transition-all duration-300 border flex flex-col items-center justify-between gap-2.5 group bg-white text-slate-800 border-slate-200 hover:border-blue-700 hover:shadow-xl hover:scale-103 cursor-pointer shadow-xs min-h-[175px]"
                   >
-                    <div className="flex flex-col items-center justify-center gap-1">
-                      <span className="text-xl sm:text-2xl font-black font-serif tracking-wider text-slate-900 group-hover:text-blue-900 transition-colors">
+                    <div className="flex flex-col items-center justify-center gap-1 w-full">
+                      <span className="text-lg sm:text-xl font-black font-serif tracking-wider text-slate-900 group-hover:text-blue-900 transition-colors">
                         {exam.code}
                       </span>
 
@@ -134,7 +134,7 @@ export const CompetitivePlatformRoadmap: React.FC<CompetitivePlatformRoadmapProp
 
           <div className="flex items-center gap-2">
             <span className="font-semibold text-slate-700">{t('उपलब्ध:', 'Available:')}</span>
-            <span className="font-mono font-bold text-blue-900">MPSC · UPSC · SSC · RRB</span>
+            <span className="font-mono font-bold text-blue-900">MPSC · UPSC · SSC · RRB · POLICE BHARTI</span>
           </div>
         </div>
 

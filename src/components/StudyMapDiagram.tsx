@@ -3,7 +3,7 @@ import { Sparkles, ZoomIn, ZoomOut, Maximize2, Layers, CheckCircle, Info, X } fr
 import { useLanguage } from '../context/LanguageContext';
 
 export interface StudyMapDiagramProps {
-  examId: 'mpsc' | 'upsc' | 'ssc' | 'rrb';
+  examId: 'mpsc' | 'upsc' | 'ssc' | 'rrb' | 'police';
   onOpenInquiry?: (category: string, subject?: string) => void;
   onSelectNode?: (nodeId: string, title: string, marathiTitle: string) => void;
 }
@@ -67,14 +67,33 @@ export const StudyMapDiagram: React.FC<StudyMapDiagramProps> = ({
       if (lower.includes('post')) return 'ssc-posts';
       return 'ssc-root';
     }
-    if (lower === 'rrb') return 'rrb-root';
-    if (lower.includes('syllabus')) return 'rrb-syllabus';
-    if (lower.includes('pattern') || lower.includes('stage')) return 'rrb-pattern';
-    if (lower.includes('cbt-1')) return 'rrb-cbt1';
-    if (lower.includes('cbt-2')) return 'rrb-cbt2';
-    if (lower.includes('cbat')) return 'rrb-cbat';
-    if (lower.includes('post')) return 'rrb-posts';
-    return 'rrb-root';
+    if (examId === 'rrb') {
+      if (lower === 'rrb') return 'rrb-root';
+      if (lower.includes('syllabus')) return 'rrb-syllabus';
+      if (lower.includes('pattern') || lower.includes('stage')) return 'rrb-pattern';
+      if (lower.includes('cbt-1')) return 'rrb-cbt1';
+      if (lower.includes('cbt-2')) return 'rrb-cbt2';
+      if (lower.includes('cbat')) return 'rrb-cbat';
+      if (lower.includes('post')) return 'rrb-posts';
+      return 'rrb-root';
+    }
+    if (examId === 'police') {
+      if (lower.includes('police') && (lower.includes('bharti') || lower === 'police')) return 'police-root';
+      if (lower.includes('syllabus')) return 'police-syllabus';
+      if (lower.includes('pattern') || lower.includes('stage')) return 'police-pattern';
+      if (lower.includes('physical') || lower.includes('pet')) return 'police-physical';
+      if (lower.includes('written')) return 'police-written';
+      if (lower.includes('driver skill') || lower.includes('driving')) return 'police-driving-test';
+      if (lower.includes('document') || lower.includes('medical') || lower.includes('selection')) return 'police-selection';
+      if (lower.includes('constable') && !lower.includes('driver') && !lower.includes('srpf')) return 'police-constable';
+      if (lower.includes('driver')) return 'police-driver';
+      if (lower.includes('srpf')) return 'police-srpf';
+      if (lower.includes('bandsman') || lower.includes('railway')) return 'police-bandsman';
+      if (lower.includes('post')) return 'police-posts';
+      if (lower.includes('eligibility') || lower.includes('criteria')) return 'police-eligibility';
+      return 'police-root';
+    }
+    return 'police-root';
   };
 
   const setActiveNodeModal = (
@@ -1133,6 +1152,212 @@ export const StudyMapDiagram: React.FC<StudyMapDiagramProps> = ({
             <div className="mt-16 pt-4 border-t border-slate-200 text-left">
               <span className="text-[11px] font-mono tracking-widest text-slate-400 uppercase font-semibold">
                 RRB • INDIAN RAILWAYS CADRES
+              </span>
+            </div>
+
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* 6. POLICE BHARTI STUDY MAP (Consistent Architectural Layout & Theme) */}
+        {/* ========================================================================= */}
+        {examId === 'police' && (
+          <div className="min-w-[700px] max-w-4xl mx-auto py-4 text-center">
+            
+            {/* Top Root Node: Police Bharti */}
+            <div className="inline-block mb-6">
+              <DiagramNode
+                label="POLICE BHARTI"
+                marathiLabel="महाराष्ट्र पोलीस भरती"
+                subLabel="गृह विभाग, महाराष्ट्र शासन"
+                size="lg"
+                color="navy"
+                onClick={() =>
+                  setActiveNodeModal({
+                    title: 'Maharashtra Police Bharti Recruitment',
+                    marathiTitle: 'महाराष्ट्र पोलीस भरती संपूर्ण आराखडा',
+                    details:
+                      'State-wide recruitment for Police Constable, Driver, SRPF Armed Constable & Bandsman. Physical Test (50 Marks) + Written Examination (100 Marks).',
+                    marathiDetails:
+                      'पोलीस शिपाई, चालक, SRPF व बँड्समन पदांची भरती. पहिली पायरी मैदानी चाचणी (५० गुण) व दुसरी पायरी OMR लेखी परीक्षा (१०० गुण).',
+                  })
+                }
+              />
+              <VBranch height="h-8" color="navy" className="mt-1" />
+            </div>
+
+            {/* 4 Architectural Branches: Syllabus | Pattern / Stages | Posts | Eligibility */}
+            <div className="relative max-w-3xl mx-auto">
+              <div className="absolute top-0 left-[10%] right-[10%]">
+                <HBranch color="navy" />
+              </div>
+              <JunctionNode color="navy" />
+
+              <div className="grid grid-cols-4 gap-3.5 pt-4">
+                
+                {/* Branch 1: Syllabus */}
+                <div className="flex flex-col items-center">
+                  <VBranch height="h-5" color="teal" className="-mt-4 mb-1" />
+                  <DiagramNode
+                    label="Syllabus"
+                    marathiLabel="अभ्यासक्रम"
+                    subLabel="१०० गुण / ४ विषय"
+                    color="teal"
+                    size="md"
+                    onClick={() =>
+                      setActiveNodeModal({
+                        title: 'Police Bharti 4-Subject Syllabus',
+                        marathiTitle: 'पोलीस भरती चार विषय अभ्यासक्रम',
+                        details:
+                          'Marathi Grammar (25 Qs), Mathematics (25 Qs), Reasoning (25 Qs), General Knowledge & Current Affairs (25 Qs). Total 100 questions in 90 minutes.',
+                        marathiDetails:
+                          'मराठी व्याकरण (२५ गुण), अंकगणित (२५ गुण), बुद्धिमत्ता चाचणी (२५ गुण), सामान्य ज्ञान व चालू घडामोडी (२५ गुण). ९० मिनिटांत १०० प्रश्न.',
+                      })
+                    }
+                  />
+
+                  {/* Micro sub-nodes for syllabus preview */}
+                  <VBranch height="h-5" color="teal" className="mt-2" />
+                  <div className="flex flex-col gap-1.5 w-full max-w-[150px]">
+                    <div className="px-2 py-1 rounded-md bg-teal-50/90 border border-teal-200 text-[10px] font-bold text-teal-900">
+                      मराठी व्याकरण (२५)
+                    </div>
+                    <div className="px-2 py-1 rounded-md bg-teal-50/90 border border-teal-200 text-[10px] font-bold text-teal-900">
+                      गणित + बुद्धिमत्ता (५०)
+                    </div>
+                    <div className="px-2 py-1 rounded-md bg-teal-50/90 border border-teal-200 text-[10px] font-bold text-teal-900">
+                      सामान्य ज्ञान + चालू (२५)
+                    </div>
+                  </div>
+                </div>
+
+                {/* Branch 2: Pattern / Stages */}
+                <div className="flex flex-col items-center">
+                  <VBranch height="h-5" color="teal" className="-mt-4 mb-1" />
+                  <DiagramNode
+                    label="Pattern / Stages"
+                    marathiLabel="परीक्षा स्वरूप"
+                    subLabel="दोन प्रमुख टप्पे"
+                    color="teal"
+                    size="md"
+                    onClick={() =>
+                      setActiveNodeModal({
+                        title: 'Police Bharti Selection Stages',
+                        marathiTitle: 'पोलीस भरती परीक्षा टप्पे व स्वरूप',
+                        details:
+                          'Stage 1: Physical Test (50 Marks, min 50% = 25 Marks). Stage 2: Written Examination (100 Marks, 1:10 ratio from physical). Stage 3: Driver Skill Test (50 Marks for drivers). Final Merit: 150 Marks (200 for Driver).',
+                        marathiDetails:
+                          'टप्पा १: मैदानी चाचणी (५० गुण, किमान ५०% आवश्यक). टप्पा २: लेखी परीक्षा (१:१० प्रमाण, १०० गुण). टप्पा ३: चालक कौशल्य चाचणी (५० गुण). एकूण १५० गुणांवर अंतिम निवड.',
+                      })
+                    }
+                  />
+
+                  {/* Flow down to Physical, Written, Driver */}
+                  <VBranch height="h-6" color="teal" className="mt-2" />
+                  <div className="relative w-full max-w-[210px]">
+                    <div className="absolute top-0 left-[15%] right-[15%]">
+                      <HBranch color="teal" />
+                    </div>
+                    <JunctionNode color="teal" />
+                    <div className="grid grid-cols-3 gap-1.5 pt-3">
+                      <div className="flex flex-col items-center">
+                        <VBranch height="h-4" color="teal" className="-mt-3 mb-1" />
+                        <DiagramNode label="Physical" marathiLabel="मैदानी ५०M" color="teal" size="sm" />
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <VBranch height="h-4" color="teal" className="-mt-3 mb-1" />
+                        <DiagramNode label="Written" marathiLabel="लेखी १००M" color="teal" size="sm" />
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <VBranch height="h-4" color="teal" className="-mt-3 mb-1" />
+                        <DiagramNode label="Driver Skill" marathiLabel="चालक ५०M" color="teal" size="sm" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Branch 3: Posts */}
+                <div className="flex flex-col items-center">
+                  <VBranch height="h-5" color="teal" className="-mt-4 mb-1" />
+                  <DiagramNode
+                    label="Posts"
+                    marathiLabel="संवर्ग पदे"
+                    subLabel="४ कार्यकारी संवर्ग"
+                    color="teal"
+                    size="md"
+                    onClick={() =>
+                      setActiveNodeModal({
+                        title: 'Police Bharti Cadres & Positions',
+                        marathiTitle: 'पोलीस भरतीतील संवर्ग पदे',
+                        details:
+                          'Police Constable, Police Driver, SRPF Armed Constable, Bandsman and Railway Police across 36 districts and commissionerates.',
+                        marathiDetails:
+                          'पोलीस शिपाई, चालक शिपाई, राज्य राखीव पोलीस बल (SRPF), बँड्समन व लोहमार्ग पोलीस.',
+                      })
+                    }
+                  />
+
+                  {/* Micro sub-nodes for posts */}
+                  <VBranch height="h-5" color="teal" className="mt-2" />
+                  <div className="flex flex-col gap-1.5 w-full max-w-[150px]">
+                    <div className="px-2 py-1 rounded-md bg-teal-50/90 border border-teal-200 text-[10px] font-bold text-teal-900">
+                      पोलीस शिपाई (जिल्हा/शहर)
+                    </div>
+                    <div className="px-2 py-1 rounded-md bg-teal-50/90 border border-teal-200 text-[10px] font-bold text-teal-900">
+                      पोलीस चालक (Driver)
+                    </div>
+                    <div className="px-2 py-1 rounded-md bg-teal-50/90 border border-teal-200 text-[10px] font-bold text-teal-900">
+                      SRPF सशस्त्र पोलीस
+                    </div>
+                    <div className="px-2 py-1 rounded-md bg-teal-50/90 border border-teal-200 text-[10px] font-bold text-teal-900">
+                      बँड्समन व लोहमार्ग
+                    </div>
+                  </div>
+                </div>
+
+                {/* Branch 4: Eligibility & Criteria */}
+                <div className="flex flex-col items-center">
+                  <VBranch height="h-5" color="teal" className="-mt-4 mb-1" />
+                  <DiagramNode
+                    label="Eligibility & Criteria"
+                    marathiLabel="पात्रता व निकष"
+                    subLabel="१२ वी / वय / शारीरिक"
+                    color="teal"
+                    size="md"
+                    onClick={() =>
+                      setActiveNodeModal({
+                        title: 'Eligibility & Physical Standards',
+                        marathiTitle: 'पात्रता व शारीरिक निकष',
+                        details:
+                          'Education: 12th Pass (HSC). Age: 18-28 Yrs (Open), 18-33 Yrs (Reserved). Height: Male 165 cm, Female 155 cm (SRPF Male 168 cm). Chest: 79 cm + 5 cm expansion.',
+                        marathiDetails:
+                          'पात्रता: १२ वी उत्तीर्ण. वय: १८ ते २८ वर्षे (खुला), १८ ते ३३ वर्षे (मागासवर्गीय). उंची: पुरुष १६५ सें.मी., महिला १५५ सें.मी. छाती: ७९ सें.मी. + ५ सें.मी. फुगवून.',
+                      })
+                    }
+                  />
+
+                  {/* Micro sub-nodes for eligibility */}
+                  <VBranch height="h-5" color="teal" className="mt-2" />
+                  <div className="flex flex-col gap-1.5 w-full max-w-[150px]">
+                    <div className="px-2 py-1 rounded-md bg-teal-50/90 border border-teal-200 text-[10px] font-bold text-teal-900">
+                      १२ वी उत्तीर्ण (HSC)
+                    </div>
+                    <div className="px-2 py-1 rounded-md bg-teal-50/90 border border-teal-200 text-[10px] font-bold text-teal-900">
+                      वय: १८ ते २८ / ३३ वर्षे
+                    </div>
+                    <div className="px-2 py-1 rounded-md bg-teal-50/90 border border-teal-200 text-[10px] font-bold text-teal-900">
+                      उंची: पुरुष १६५ / महिला १५५ cm
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            {/* Bottom Signature Marker */}
+            <div className="mt-16 pt-4 border-t border-slate-200 text-left">
+              <span className="text-[11px] font-mono tracking-widest text-slate-400 uppercase font-semibold">
+                MAHARASHTRA POLICE • HOME DEPARTMENT CADRES
               </span>
             </div>
 

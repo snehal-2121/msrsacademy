@@ -4,6 +4,7 @@ import { AMBEDKAR_LIBRARY_BOOKS, TAPOVAN_GIRLS_FACILITIES, LIBRARY_REGULATIONS }
 import { usePhotos } from '../context/PhotoContext';
 import { useLanguage } from '../context/LanguageContext';
 import { NavSection } from '../types';
+import { EditableImage } from '../components/EditableImage';
 
 interface LibraryPageProps {
   onNavigate: (section: NavSection) => void;
@@ -139,10 +140,12 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onNavigate, onOpenInqu
               {libraryWelcomeImg && (
                 <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-xs group">
                   <div className="h-56 overflow-hidden">
-                    <img
-                      src={libraryWelcomeImg}
+                    <EditableImage
+                      slotId="core_library_welcome"
+                      fallbackSlotId="library_welcome"
                       alt="Library Welcome & Bookshelves"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full"
+                      imgClassName="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                   <div className="p-4 bg-slate-50">
@@ -155,10 +158,12 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onNavigate, onOpenInqu
               {tapovanCubiclesImg && (
                 <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-xs group">
                   <div className="h-56 overflow-hidden">
-                    <img
-                      src={tapovanCubiclesImg}
+                    <EditableImage
+                      slotId="core_tapovan_cubicles"
+                      fallbackSlotId="tapovan_cubicles"
                       alt="Taporatna Girls Study Cubicles"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full"
+                      imgClassName="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                   <div className="p-4 bg-slate-50">
@@ -171,10 +176,12 @@ export const LibraryPage: React.FC<LibraryPageProps> = ({ onNavigate, onOpenInqu
               {libraryBooksImg && (
                 <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-xs group">
                   <div className="h-56 overflow-hidden">
-                    <img
-                      src={libraryBooksImg}
+                    <EditableImage
+                      slotId="core_library_books"
+                      fallbackSlotId="library_books_closeup"
                       alt="Library Competitive Exam Bookshelves"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full"
+                      imgClassName="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                   <div className="p-4 bg-slate-50">

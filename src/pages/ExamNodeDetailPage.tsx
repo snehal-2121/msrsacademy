@@ -18,7 +18,7 @@ import {
 import { VERIFIED_EXAM_NODE_DATA } from '../data/verifiedExamNodeData';
 
 interface ExamNodeDetailPageProps {
-  examId: 'mpsc' | 'upsc' | 'ssc' | 'rrb';
+  examId: 'mpsc' | 'upsc' | 'ssc' | 'rrb' | 'police';
   nodeId: string;
   nodeTitle?: string;
   nodeMarathiTitle?: string;

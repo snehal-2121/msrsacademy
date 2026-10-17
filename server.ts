@@ -135,6 +135,12 @@ if (!fs.existsSync(publicUploadsPath)) {
 }
 app.use('/uploads', express.static(publicUploadsPath));
 
+const publicDocumentsPath = path.resolve(__dirname, 'public', 'documents');
+if (!fs.existsSync(publicDocumentsPath)) {
+  fs.mkdirSync(publicDocumentsPath, { recursive: true });
+}
+app.use('/documents', express.static(publicDocumentsPath));
+
 const distPath = path.resolve(__dirname, 'dist');
 if (fs.existsSync(distPath)) {
   app.use(express.static(distPath));

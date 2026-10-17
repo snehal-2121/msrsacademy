@@ -4,6 +4,7 @@ import { Plane, Droplet, Clock, ShieldCheck, Sprout, Sparkles, Check, ArrowRight
 import { usePhotos } from '../context/PhotoContext';
 import { NavSection } from '../types';
 import { useLanguage } from '../context/LanguageContext';
+import { EditableImage } from './EditableImage';
 
 interface AgricultureDroneSectionProps {
   onOpenInquiry: (category: string, subject?: string) => void;
@@ -114,23 +115,26 @@ export const AgricultureDroneSection: React.FC<AgricultureDroneSectionProps> = (
           <div className="lg:col-span-6 space-y-4">
             {dronePujaImg && (
               <div className="rounded-2xl overflow-hidden border-2 border-emerald-300 shadow-xl bg-slate-900 group relative">
-                <img
-                  src={dronePujaImg}
+                <EditableImage
+                  slotId="home_drone_puja"
+                  fallbackSlotId="drone_puja"
                   alt="Agricultural Drone Spraying - Launch and Puja Ceremony"
-                  className="w-full h-72 sm:h-84 object-cover object-center group-hover:scale-102 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent flex flex-col justify-end p-6 text-white">
-                  <span className="text-xs font-bold text-amber-300 uppercase tracking-widest flex items-center gap-1.5">
-                    <Plane className="w-4 h-4 text-emerald-400" />
-                    मशाळे ॲग्रिकल्चरल सर्व्हिसेस · प्रत्यक्ष फोटो
-                  </span>
-                  <h3 className="text-lg sm:text-xl font-bold font-serif mt-1">
-                    अत्याधुनिक कृषी फवारणी ड्रोन (Quadcopters)
-                  </h3>
-                  <p className="text-xs text-slate-200 mt-1">
-                    १० मिनिटांत १ एकर फवारणी · ९०% पाण्याची बचत · औषधांचा १००% कार्यक्षम वापर
-                  </p>
-                </div>
+                  className="w-full h-72 sm:h-84"
+                  imgClassName="w-full h-72 sm:h-84 object-cover object-center group-hover:scale-102 transition-transform duration-500"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent flex flex-col justify-end p-6 text-white pointer-events-none">
+                    <span className="text-xs font-bold text-amber-300 uppercase tracking-widest flex items-center gap-1.5">
+                      <Plane className="w-4 h-4 text-emerald-400" />
+                      मशाळे ॲग्रिकल्चरल सर्व्हिसेस · प्रत्यक्ष फोटो
+                    </span>
+                    <h3 className="text-lg sm:text-xl font-bold font-serif mt-1">
+                      अत्याधुनिक कृषी फवारणी ड्रोन (Quadcopters)
+                    </h3>
+                    <p className="text-xs text-slate-200 mt-1">
+                      १० मिनिटांत १ एकर फवारणी · ९०% पाण्याची बचत · औषधांचा १००% कार्यक्षम वापर
+                    </p>
+                  </div>
+                </EditableImage>
               </div>
             )}
 
@@ -138,10 +142,12 @@ export const AgricultureDroneSection: React.FC<AgricultureDroneSectionProps> = (
             <div className="bg-white rounded-2xl p-4 border border-emerald-200 shadow-xs flex items-center gap-4">
               {droneFamilyImg && (
                 <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0 border border-emerald-300 shadow-xs">
-                  <img
-                    src={droneFamilyImg}
+                  <EditableImage
+                    slotId="home_drone_family"
+                    fallbackSlotId="drone_family"
                     alt="Drone Inauguration with family and team"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full"
+                    imgClassName="w-full h-full object-cover"
                   />
                 </div>
               )}

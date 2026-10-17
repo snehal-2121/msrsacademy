@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { BookOpen, Sparkles, Palette, Crown, Sun, Feather, Camera } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { BookOpen, Sparkles, Palette, Crown, Sun, Feather, Camera, Image as ImageIcon } from 'lucide-react';
 import { NavSection } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { usePhotos } from '../context/PhotoContext';
+import { CircleImageSelectorModal } from './CircleImageSelectorModal';
 
 // Exact portrait image paths
 import drAmbedkarHeroImg from '../assets/images/dr_ambedkar_hero.jpg';
@@ -21,10 +22,59 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
 }) => {
   const [theme, setTheme] = useState<HeroTheme>('royal');
   const { language, t } = useLanguage();
-  const { getPhotoSrc, setIsModalOpen } = usePhotos();
+  const { getPhotoSrc } = usePhotos();
+
+  // Circle Selector Modal State
+  const [circleModalOpen, setCircleModalOpen] = useState(false);
+  const [selectedCircleForEdit, setSelectedCircleForEdit] = useState<'left' | 'right'>('left');
+  const [updateTick, setUpdateTick] = useState(0);
+
+  useEffect(() => {
+    const handleCircleChange = () => setUpdateTick(prev => prev + 1);
+    window.addEventListener('circle_photo_changed', handleCircleChange);
+    return () => window.removeEventListener('circle_photo_changed', handleCircleChange);
+  }, []);
 
   const ambedkarImgSrc = getPhotoSrc('dr_ambedkar_hero') || drAmbedkarHeroImg;
   const swamijiImgSrc = getPhotoSrc('taporatna_swamiji_hero') || taporatnaSwamijiHeroImg;
+
+  // Dynamic titles, quotes, and badges based on selected preset or custom user image
+  const ambedkarTitle = (language === 'mr'
+    ? localStorage.getItem('circle_title_mr_dr_ambedkar_hero')
+    : localStorage.getItem('circle_title_en_dr_ambedkar_hero')) || t('भारतरत्न डॉ. बाबासाहेब आंबेडकर', 'Bharat Ratna Dr. B. R. Ambedkar');
+
+  const ambedkarQuote = (language === 'mr'
+    ? localStorage.getItem('circle_quote_mr_dr_ambedkar_hero')
+    : localStorage.getItem('circle_quote_en_dr_ambedkar_hero')) || t('"शिका, संघटित व्हा आणि संघर्ष करा"', '"Educate, Agitate, Organise"');
+
+  const ambedkarBadge = (language === 'mr'
+    ? localStorage.getItem('circle_badge_mr_dr_ambedkar_hero')
+    : localStorage.getItem('circle_badge_en_dr_ambedkar_hero')) || t('डॉ. बाबासाहेब आंबेडकर ग्रंथालय प्रेरणा', 'Inspiration · Dr. Babasaheb Ambedkar');
+
+  // Right circle: Shivaji Maharaj vs Swamiji Maharaj vs Custom
+  const rightPersonality = localStorage.getItem('circle_personality_taporatna_swamiji_hero');
+  const isShivajiMaharaj = rightPersonality === 'maharaj_shivaji';
+
+  const maharajTitle = (language === 'mr'
+    ? localStorage.getItem('circle_title_mr_taporatna_swamiji_hero')
+    : localStorage.getItem('circle_title_en_taporatna_swamiji_hero')) ||
+    (isShivajiMaharaj
+      ? t('छत्रपती शिवाजी महाराज', 'Chhatrapati Shivaji Maharaj')
+      : t('लिंगैक्य श्री. ष. ब्र. तपोरत्नं योगिराजेंद्र शिवाचार्य महास्वामीजी', 'Taporatna Yogirajendra Shivacharya Mahaswamiji'));
+
+  const maharajQuote = (language === 'mr'
+    ? localStorage.getItem('circle_quote_mr_taporatna_swamiji_hero')
+    : localStorage.getItem('circle_quote_en_taporatna_swamiji_hero')) ||
+    (isShivajiMaharaj
+      ? t('"प्रौढ प्रताप पुरंदर, क्षत्रिय कुलावतंस, हिंदवी स्वराज्य संस्थापक"', '"Founder of Hindavi Swarajya · Eternal Symbol of Valour & Wisdom"')
+      : t('"ज्ञान आणि तपाचे पावन प्रतीक"', '"Sacred Symbol of Knowledge & Penance"'));
+
+  const maharajBadge = (language === 'mr'
+    ? localStorage.getItem('circle_badge_mr_taporatna_swamiji_hero')
+    : localStorage.getItem('circle_badge_en_taporatna_swamiji_hero')) ||
+    (isShivajiMaharaj
+      ? t('अकॅडमी प्रेरणास्थान · छत्रपती शिवराय', 'Eternal Inspiration · Chhatrapati Shivaji Maharaj')
+      : t('तपोरत्न अभ्यासिका प्रेरणा', 'Inspiration · Taporatna Abhyasika'));
 
   return (
     <section
@@ -198,7 +248,14 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
               {/* Left Circle: Dr. Baba Saheb Image */}
               <div className="order-2 lg:order-1 lg:col-span-3 flex flex-col items-center text-center">
                 <div className="relative group">
-                  <div className="relative w-36 h-36 sm:w-44 sm:h-44 lg:w-48 lg:h-48 rounded-full overflow-hidden border-4 border-white shadow-2xl shadow-blue-900/30 ring-4 ring-blue-300 bg-slate-100 mx-auto transition-transform duration-500 group-hover:scale-105">
+                  <div
+                    onClick={() => {
+                      setSelectedCircleForEdit('left');
+                      setCircleModalOpen(true);
+                    }}
+                    className="relative w-36 h-36 sm:w-44 sm:h-44 lg:w-48 lg:h-48 rounded-full overflow-hidden border-4 border-white shadow-2xl shadow-blue-900/30 ring-4 ring-blue-300 bg-slate-100 mx-auto transition-transform duration-500 group-hover:scale-105 cursor-pointer"
+                    title={t('फोटो बदला किंवा उपलब्ध पर्याय निवडा', 'Change photo or choose from presets')}
+                  >
                     <img
                       src={ambedkarImgSrc}
                       alt="Dr. Babasaheb Ambedkar"
@@ -206,24 +263,51 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                       className="w-full h-full object-cover object-top"
                     />
                     <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-black/10" />
+
+                    {/* Hover Overlay with Change Photo Badge */}
+                    <div className="absolute inset-0 bg-blue-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-2 text-white">
+                      <Camera className="w-6 h-6 text-amber-300 mb-1" />
+                      <span className="text-[11px] font-bold bg-blue-900/90 px-2.5 py-1 rounded-full shadow-lg border border-white/30 text-center leading-tight">
+                        {t('फोटो बदला / निवडा', 'Change Photo')}
+                      </span>
+                    </div>
+
+                    {/* Permanent Mobile / Corner Button */}
                     <button
-                      onClick={() => setIsModalOpen(true)}
-                      className="absolute bottom-2 right-2 p-2 rounded-full bg-blue-900/90 text-white shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-blue-800"
-                      title={t('फोटो बदला / अपलोड करा', 'Change / Upload Photo')}
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedCircleForEdit('left');
+                        setCircleModalOpen(true);
+                      }}
+                      className="absolute bottom-2 right-2 p-2 rounded-full bg-blue-900/95 text-white shadow-lg border border-white/40 hover:bg-blue-800 transition-transform active:scale-95 cursor-pointer"
+                      title={t('फोटो बदला किंवा पर्याय निवडा', 'Change Photo or Choose Preset')}
                     >
-                      <Camera className="w-3.5 h-3.5" />
+                      <Camera className="w-3.5 h-3.5 text-amber-300" />
                     </button>
                   </div>
+
                   <div className="mt-3.5">
                     <span className="inline-block px-3 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-900 uppercase tracking-wider mb-1 shadow-2xs">
-                      {t('डॉ. बाबासाहेब आंबेडकर ग्रंथालय प्रेरणा', 'Inspiration · Dr. Babasaheb Ambedkar')}
+                      {ambedkarBadge}
                     </span>
                     <h2 className="text-sm sm:text-base font-bold text-slate-900 font-serif">
-                      {t('भारतरत्न डॉ. बाबासाहेब आंबेडकर', 'Bharat Ratna Dr. B. R. Ambedkar')}
+                      {ambedkarTitle}
                     </h2>
                     <p className="text-[11px] font-semibold text-blue-900 mt-0.5">
-                      {t('"शिका, संघटित व्हा आणि संघर्ष करा"', '"Educate, Agitate, Organise"')}
+                      {ambedkarQuote}
                     </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedCircleForEdit('left');
+                        setCircleModalOpen(true);
+                      }}
+                      className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 hover:text-blue-900 hover:underline cursor-pointer"
+                    >
+                      <ImageIcon className="w-3 h-3" />
+                      <span>{t('फोटो बदला / पर्याय निवडा', 'Change / Choose Photo')}</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -268,35 +352,79 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                 </div>
               </div>
 
-              {/* Right Circle: Taporatna Yogirajendra Mahaswamiji */}
+              {/* Right Circle: Maharaj (Chhatrapati Shivaji Maharaj or Taporatna Swamiji Maharaj or Custom) */}
               <div className="order-3 lg:order-3 lg:col-span-3 flex flex-col items-center text-center">
                 <div className="relative group">
-                  <div className="relative w-36 h-36 sm:w-44 sm:h-44 lg:w-48 lg:h-48 rounded-full overflow-hidden border-4 border-white shadow-2xl shadow-amber-900/30 ring-4 ring-amber-300 bg-slate-100 mx-auto transition-transform duration-500 group-hover:scale-105">
+                  <div
+                    onClick={() => {
+                      setSelectedCircleForEdit('right');
+                      setCircleModalOpen(true);
+                    }}
+                    className={`relative w-36 h-36 sm:w-44 sm:h-44 lg:w-48 lg:h-48 rounded-full overflow-hidden border-4 border-white shadow-2xl ring-4 bg-slate-100 mx-auto transition-transform duration-500 group-hover:scale-105 cursor-pointer ${
+                      isShivajiMaharaj
+                        ? 'shadow-amber-900/40 ring-amber-400'
+                        : 'shadow-amber-900/30 ring-amber-300'
+                    }`}
+                    title={t('फोटो बदला किंवा उपलब्ध पर्याय निवडा', 'Change photo or choose from presets')}
+                  >
                     <img
                       src={swamijiImgSrc}
-                      alt="Taporatna Yogirajendra Shivacharya Mahaswamiji"
+                      alt={maharajTitle}
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover object-top"
                     />
                     <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-black/10" />
+
+                    {/* Hover Overlay with Change Photo Badge */}
+                    <div className="absolute inset-0 bg-amber-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-2 text-white">
+                      <Camera className="w-6 h-6 text-amber-300 mb-1" />
+                      <span className="text-[11px] font-bold bg-amber-700/90 px-2.5 py-1 rounded-full shadow-lg border border-white/30 text-center leading-tight">
+                        {t('फोटो बदला / निवडा', 'Change Photo')}
+                      </span>
+                    </div>
+
+                    {/* Permanent Mobile / Corner Button */}
                     <button
-                      onClick={() => setIsModalOpen(true)}
-                      className="absolute bottom-2 right-2 p-2 rounded-full bg-amber-700/90 text-white shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-amber-600"
-                      title={t('फोटो बदला / अपलोड करा', 'Change / Upload Photo')}
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedCircleForEdit('right');
+                        setCircleModalOpen(true);
+                      }}
+                      className="absolute bottom-2 right-2 p-2 rounded-full bg-amber-700/95 text-white shadow-lg border border-white/40 hover:bg-amber-600 transition-transform active:scale-95 cursor-pointer"
+                      title={t('फोटो बदला किंवा पर्याय निवडा', 'Change Photo or Choose Preset')}
                     >
-                      <Camera className="w-3.5 h-3.5" />
+                      <Camera className="w-3.5 h-3.5 text-white" />
                     </button>
                   </div>
+
                   <div className="mt-3.5">
-                    <span className="inline-block px-3 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900 uppercase tracking-wider mb-1 shadow-2xs">
-                      {t('तपोरत्न अभ्यासिका प्रेरणा', 'Inspiration · Taporatna Abhyasika')}
+                    <span
+                      className={`inline-block px-3 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider mb-1 shadow-2xs ${
+                        isShivajiMaharaj
+                          ? 'bg-amber-100 text-amber-950 border border-amber-300'
+                          : 'bg-amber-100 text-amber-900'
+                      }`}
+                    >
+                      {maharajBadge}
                     </span>
                     <h2 className="text-sm sm:text-base font-bold text-slate-900 font-serif">
-                      {t('लिंगैक्य श्री. ष. ब्र. तपोरत्नं योगिराजेंद्र शिवाचार्य महास्वामीजी', 'Taporatna Yogirajendra Shivacharya Mahaswamiji')}
+                      {maharajTitle}
                     </h2>
                     <p className="text-[11px] font-semibold text-amber-900 mt-0.5">
-                      {t('"ज्ञान आणि तपाचे पावन प्रतीक"', '"Sacred Symbol of Knowledge & Penance"')}
+                      {maharajQuote}
                     </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedCircleForEdit('right');
+                        setCircleModalOpen(true);
+                      }}
+                      className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-bold text-amber-800 hover:text-amber-950 hover:underline cursor-pointer"
+                    >
+                      <ImageIcon className="w-3 h-3" />
+                      <span>{t('फोटो बदला / पर्याय निवडा', 'Change / Choose Photo')}</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -307,6 +435,13 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
         </div>
 
       </div>
+
+      {/* Circle Image Selector & Custom Uploader Modal */}
+      <CircleImageSelectorModal
+        isOpen={circleModalOpen}
+        onClose={() => setCircleModalOpen(false)}
+        initialCircle={selectedCircleForEdit}
+      />
     </section>
   );
 };

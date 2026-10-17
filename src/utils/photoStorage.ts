@@ -134,3 +134,18 @@ export async function clearAllPhotosFromStorage(): Promise<void> {
     // ignore
   }
 }
+
+export async function removePhotoFromStorage(slotId: string): Promise<void> {
+  try {
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    tx.objectStore(STORE_NAME).delete(slotId);
+  } catch {
+    // ignore
+  }
+  try {
+    localStorage.removeItem(`msr_photo_${slotId}`);
+  } catch {
+    // ignore
+  }
+}

@@ -4,6 +4,7 @@ import { BookOpen, Search, CheckCircle2, BookmarkCheck, Library, Sparkles, BookM
 import { usePhotos } from '../context/PhotoContext';
 import { NavSection } from '../types';
 import { useLanguage } from '../context/LanguageContext';
+import { EditableImage } from './EditableImage';
 
 interface AmbedkarLibraryProps {
   onOpenInquiry: (category: string, subject?: string) => void;
@@ -68,31 +69,34 @@ export const AmbedkarLibrary: React.FC<AmbedkarLibraryProps> = ({ onOpenInquiry,
           )}
         </div>
 
-        {/* Visual Library Showcase Banner (Only rendered when real uploaded photos exist) */}
+        {/* Visual Library Showcase Banner (Click any image to customize) */}
         {(libraryWelcomeImg || libraryBooksImg || libraryShowcaseImg) && (
           <div className="mb-10 grid grid-cols-1 md:grid-cols-12 gap-4">
             {libraryWelcomeImg && (
               <div className={`${libraryBooksImg || libraryShowcaseImg ? 'md:col-span-8' : 'md:col-span-12'} rounded-2xl overflow-hidden border border-blue-200 shadow-md relative group h-56 sm:h-72 bg-slate-900`}>
-                <img
-                  src={libraryWelcomeImg}
+                <EditableImage
+                  slotId="home_library_welcome"
+                  fallbackSlotId="library_welcome"
                   alt="Dr. Babasaheb Ambedkar Library Bookshelves and Welcome Area"
-                  className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-950/90 via-blue-950/60 to-transparent flex flex-col justify-center px-6 sm:px-10 text-white max-w-xl">
-                  <span className="text-xs font-bold text-amber-300 uppercase tracking-widest flex items-center gap-1.5 mb-1">
-                    <BookMarked className="w-4 h-4 text-amber-300" />
-                    {t('प्रत्यक्ष ग्रंथालय दालन · पुस्तकांचे भांडार', 'Actual Campus Library · 2,300+ Books')}
-                  </span>
-                  <h3 className="text-xl sm:text-2xl font-bold font-serif text-white">
-                    {t('हजारो पुस्तकांचा समृद्ध संग्रह व शांत अभ्यास वातावरण', 'Authoritative Book Collection & Tranquil Environment')}
-                  </h3>
-                  <p className="text-xs text-blue-100 mt-2 hidden sm:block leading-relaxed">
-                    {t(
-                      'महाराष्ट्र स्टेट बोर्ड, एनसीईआरटी, स्पर्धा परीक्षा मार्गदर्शक, इतिहास, राज्यशास्त्र, अर्थशास्त्र आणि प्रेरणादायी साहित्याची सुसज्ज मांडणी.',
-                      'Comprehensive shelves for Maharashtra State Board, NCERT, MPSC/UPSC guides, constitution, history, economy, and inspiring classics.'
-                    )}
-                  </p>
-                </div>
+                  className="w-full h-full"
+                  imgClassName="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-700"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-950/90 via-blue-950/60 to-transparent flex flex-col justify-center px-6 sm:px-10 text-white max-w-xl pointer-events-none">
+                    <span className="text-xs font-bold text-amber-300 uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                      <BookMarked className="w-4 h-4 text-amber-300" />
+                      {t('प्रत्यक्ष ग्रंथालय दालन · पुस्तकांचे भांडार', 'Actual Campus Library · 2,300+ Books')}
+                    </span>
+                    <h3 className="text-xl sm:text-2xl font-bold font-serif text-white">
+                      {t('हजारो पुस्तकांचा समृद्ध संग्रह व शांत अभ्यास वातावरण', 'Authoritative Book Collection & Tranquil Environment')}
+                    </h3>
+                    <p className="text-xs text-blue-100 mt-2 hidden sm:block leading-relaxed">
+                      {t(
+                        'महाराष्ट्र स्टेट बोर्ड, एनसीईआरटी, स्पर्धा परीक्षा मार्गदर्शक, इतिहास, राज्यशास्त्र, अर्थशास्त्र आणि प्रेरणादायी साहित्याची सुसज्ज मांडणी.',
+                        'Comprehensive shelves for Maharashtra State Board, NCERT, MPSC/UPSC guides, constitution, history, economy, and inspiring classics.'
+                      )}
+                    </p>
+                  </div>
+                </EditableImage>
               </div>
             )}
 
@@ -100,26 +104,32 @@ export const AmbedkarLibrary: React.FC<AmbedkarLibraryProps> = ({ onOpenInquiry,
               <div className={`${libraryWelcomeImg ? 'md:col-span-4' : 'md:col-span-12'} grid grid-cols-2 md:grid-cols-1 gap-4`}>
                 {libraryBooksImg && (
                   <div className="rounded-xl overflow-hidden border border-slate-200 relative group h-26 sm:h-34">
-                    <img
-                      src={libraryBooksImg}
+                    <EditableImage
+                      slotId="home_library_books"
+                      fallbackSlotId="library_books_closeup"
                       alt="NCERT and competitive exam books collection"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                    />
-                    <div className="absolute inset-x-0 bottom-0 bg-slate-950/80 p-1.5 text-[11px] text-white font-semibold text-center truncate">
-                      {t('स्पर्धा परीक्षा ग्रंथ कपाटे', 'Exam Reference Racks')}
-                    </div>
+                      className="w-full h-full"
+                      imgClassName="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    >
+                      <div className="absolute inset-x-0 bottom-0 bg-slate-950/80 p-1.5 text-[11px] text-white font-semibold text-center truncate pointer-events-none">
+                        {t('स्पर्धा परीक्षा ग्रंथ कपाटे', 'Exam Reference Racks')}
+                      </div>
+                    </EditableImage>
                   </div>
                 )}
                 {libraryShowcaseImg && (
                   <div className="rounded-xl overflow-hidden border border-slate-200 relative group h-26 sm:h-34">
-                    <img
-                      src={libraryShowcaseImg}
+                    <EditableImage
+                      slotId="core_library_showcase"
+                      fallbackSlotId="library_showcase"
                       alt="Library showcase, awards and Buddha statue"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                    />
-                    <div className="absolute inset-x-0 bottom-0 bg-slate-950/80 p-1.5 text-[11px] text-white font-semibold text-center truncate">
-                      {t('स्मृतिचिन्हे व बुद्ध मूर्ती दालन', 'Cultural Heritage Showcase')}
-                    </div>
+                      className="w-full h-full"
+                      imgClassName="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    >
+                      <div className="absolute inset-x-0 bottom-0 bg-slate-950/80 p-1.5 text-[11px] text-white font-semibold text-center truncate pointer-events-none">
+                        {t('स्मृतिचिन्हे व बुद्ध मूर्ती दालन', 'Cultural Heritage Showcase')}
+                      </div>
+                    </EditableImage>
                   </div>
                 )}
               </div>

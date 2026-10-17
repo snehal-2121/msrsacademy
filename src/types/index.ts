@@ -12,7 +12,8 @@ export type NavSection =
   | 'exam-mpsc'
   | 'exam-upsc'
   | 'exam-ssc'
-  | 'exam-rrb';
+  | 'exam-rrb'
+  | 'exam-police';
 
 export interface InquiryFormData {
   name: string;

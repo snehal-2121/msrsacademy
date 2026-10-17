@@ -16,6 +16,7 @@ import {
 import { TAPOVAN_GIRLS_FACILITIES } from '../data/academyData';
 import { usePhotos } from '../context/PhotoContext';
 import { useLanguage } from '../context/LanguageContext';
+import { EditableImage } from './EditableImage';
 
 interface TapovanAbhyasikaProps {
   onOpenInquiry: (category: string, subject?: string) => void;
@@ -99,26 +100,28 @@ export const TapovanAbhyasika: React.FC<TapovanAbhyasikaProps> = ({ onOpenInquir
           <div className="lg:col-span-5 space-y-4">
             {tapovanImg && (
               <div className="relative rounded-2xl overflow-hidden shadow-xl border border-rose-200/80 bg-white group">
-                <img
-                  src={tapovanImg}
+                <EditableImage
+                  slotId="home_tapovan_cubicles"
+                  fallbackSlotId="tapovan_cubicles"
                   alt="Taporatna Girls Study Room & Library"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-72 sm:h-80 object-cover group-hover:scale-103 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/20 to-transparent flex flex-col justify-end p-6 text-white">
-                  <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">
-                    100% Silent Zone
-                  </span>
-                  <h3 className="text-lg sm:text-xl font-bold font-serif">
-                    {t('तपोरत्न अभ्यासिका शांतता कक्ष', 'Taporatna Abhyasika')}
-                  </h3>
-                  <p className="text-xs text-slate-200 mt-1">
-                    {t(
-                      'दीर्घकाळ अखंडित एकाग्रतेसाठी तयार केलेले स्वतंत्र लाकडी कप्पे (Cubicles).',
-                      'Individual study cabins designed for hours of deep uninterrupted concentration.'
-                    )}
-                  </p>
-                </div>
+                  className="w-full h-72 sm:h-80"
+                  imgClassName="w-full h-72 sm:h-80 object-cover group-hover:scale-103 transition-transform duration-500"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/20 to-transparent flex flex-col justify-end p-6 text-white pointer-events-none">
+                    <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">
+                      100% Silent Zone
+                    </span>
+                    <h3 className="text-lg sm:text-xl font-bold font-serif">
+                      {t('तपोरत्न अभ्यासिका शांतता कक्ष', 'Taporatna Abhyasika')}
+                    </h3>
+                    <p className="text-xs text-slate-200 mt-1">
+                      {t(
+                        'दीर्घकाळ अखंडित एकाग्रतेसाठी तयार केलेले स्वतंत्र लाकडी कप्पे (Cubicles).',
+                        'Individual study cabins designed for hours of deep uninterrupted concentration.'
+                      )}
+                    </p>
+                  </div>
+                </EditableImage>
               </div>
             )}
 

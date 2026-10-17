@@ -4,6 +4,7 @@ import { COACHING_DETAILS } from '../data/academyData';
 import { usePhotos } from '../context/PhotoContext';
 import { useLanguage } from '../context/LanguageContext';
 import { NavSection } from '../types';
+import { EditableImage } from '../components/EditableImage';
 
 interface CoachingPageProps {
   onNavigate: (section: NavSection) => void;
@@ -67,10 +68,12 @@ export const CoachingPage: React.FC<CoachingPageProps> = ({ onNavigate, onOpenIn
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {coachingClassImg && (
               <div className="lg:col-span-5 rounded-2xl overflow-hidden border border-slate-200 shadow-sm">
-                <img
-                  src={coachingClassImg}
+                <EditableImage
+                  slotId="core_coaching_batch"
+                  fallbackSlotId="coaching_students"
                   alt="Coaching classroom"
-                  className="w-full h-64 sm:h-80 object-cover"
+                  className="w-full h-64 sm:h-80"
+                  imgClassName="w-full h-64 sm:h-80 object-cover"
                 />
               </div>
             )}

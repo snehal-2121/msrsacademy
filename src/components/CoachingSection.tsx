@@ -3,6 +3,7 @@ import { GraduationCap, CheckCircle2, ArrowRight } from 'lucide-react';
 import { usePhotos } from '../context/PhotoContext';
 import { useLanguage } from '../context/LanguageContext';
 import { NavSection } from '../types';
+import { EditableImage } from './EditableImage';
 
 interface CoachingSectionProps {
   onNavigate?: (section: NavSection) => void;
@@ -112,11 +113,12 @@ export const CoachingSection: React.FC<CoachingSectionProps> = ({
           <div className="lg:col-span-5">
             <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-lg bg-white group">
               {coachingImg && (
-                <img
-                  src={coachingImg}
+                <EditableImage
+                  slotId="home_coaching_students"
+                  fallbackSlotId="coaching_students"
                   alt="Msr's Academy Students & Coaching"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-64 sm:h-72 object-cover group-hover:scale-102 transition-transform duration-500"
+                  className="w-full h-64 sm:h-72"
+                  imgClassName="w-full h-64 sm:h-72 object-cover group-hover:scale-102 transition-transform duration-500"
                 />
               )}
               <div className="p-5">

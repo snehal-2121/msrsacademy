@@ -50,7 +50,8 @@ export default function App() {
       'exam-mpsc',
       'exam-upsc',
       'exam-ssc',
-      'exam-rrb'
+      'exam-rrb',
+      'exam-police'
     ];
     return validSections.includes(cleanHash as NavSection) ? (cleanHash as NavSection) : 'home';
   };
@@ -259,6 +260,14 @@ export default function App() {
           {activeSection === 'exam-rrb' && (
             <ExamRoadmapPage
               examId="rrb"
+              onNavigate={handleNavigate}
+              onOpenInquiry={handleOpenInquiry}
+            />
+          )}
+
+          {activeSection === 'exam-police' && (
+            <ExamRoadmapPage
+              examId="police"
               onNavigate={handleNavigate}
               onOpenInquiry={handleOpenInquiry}
             />
