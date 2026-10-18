@@ -62,12 +62,16 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
       ? t('छत्रपती शिवाजी महाराज', 'Chhatrapati Shivaji Maharaj')
       : t('लिंगैक्य श्री. ष. ब्र. तपोरत्नं योगिराजेंद्र शिवाचार्य महास्वामीजी', 'Taporatna Yogirajendra Shivacharya Mahaswamiji'));
 
-  const maharajQuote = (language === 'mr'
-    ? localStorage.getItem('circle_quote_mr_taporatna_swamiji_hero')
-    : localStorage.getItem('circle_quote_en_taporatna_swamiji_hero')) ||
+  const storedMaharajQuoteMr = localStorage.getItem('circle_quote_mr_taporatna_swamiji_hero');
+  const storedMaharajQuoteEn = localStorage.getItem('circle_quote_en_taporatna_swamiji_hero');
+  const validStoredQuote = language === 'mr'
+    ? (storedMaharajQuoteMr && !storedMaharajQuoteMr.includes('ज्ञान आणि तपाचे पावन प्रतीक') ? storedMaharajQuoteMr : null)
+    : (storedMaharajQuoteEn && !storedMaharajQuoteEn.includes('Sacred Symbol of Knowledge') ? storedMaharajQuoteEn : null);
+
+  const maharajQuote = validStoredQuote ||
     (isShivajiMaharaj
       ? t('"प्रौढ प्रताप पुरंदर, क्षत्रिय कुलावतंस, हिंदवी स्वराज्य संस्थापक"', '"Founder of Hindavi Swarajya · Eternal Symbol of Valour & Wisdom"')
-      : t('"ज्ञान आणि तपाचे पावन प्रतीक"', '"Sacred Symbol of Knowledge & Penance"'));
+      : t('"मानव धर्माचा विजय असो (Manava dharmakke jayavagali)"', '"Victory to the religion of humanity"'));
 
   const maharajBadge = (language === 'mr'
     ? localStorage.getItem('circle_badge_mr_taporatna_swamiji_hero')
